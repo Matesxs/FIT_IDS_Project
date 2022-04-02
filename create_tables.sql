@@ -1,134 +1,157 @@
-/*-- Clearing created data
--- Drop table
+-- Clearing created data
 BEGIN
-BEGIN
-   EXECUTE IMMEDIATE 'DROP TABLE ' || 'users' || ' CASCADE CONSTRAINTS';
-EXCEPTION
-   WHEN OTHERS THEN
-      IF SQLCODE != -942 THEN
-         RAISE;
-      END IF;
+    -- Drop table
+    BEGIN
+       EXECUTE IMMEDIATE 'DROP TABLE ' || 'users' || ' CASCADE CONSTRAINTS';
+    EXCEPTION
+       WHEN OTHERS THEN
+          IF SQLCODE != -942 THEN
+             RAISE;
+          END IF;
+    END;
+
+    BEGIN
+       EXECUTE IMMEDIATE 'DROP TABLE ' || 'employees' || ' CASCADE CONSTRAINTS';
+    EXCEPTION
+       WHEN OTHERS THEN
+          IF SQLCODE != -942 THEN
+             RAISE;
+          END IF;
+    END;
+
+    BEGIN
+       EXECUTE IMMEDIATE 'DROP TABLE ' || 'carrier_borrow_records' || ' CASCADE CONSTRAINTS';
+    EXCEPTION
+       WHEN OTHERS THEN
+          IF SQLCODE != -942 THEN
+             RAISE;
+          END IF;
+    END;
+
+    BEGIN
+       EXECUTE IMMEDIATE 'DROP TABLE ' || 'carrier_collection' || ' CASCADE CONSTRAINTS';
+    EXCEPTION
+       WHEN OTHERS THEN
+          IF SQLCODE != -942 THEN
+             RAISE;
+          END IF;
+    END;
+
+    BEGIN
+       EXECUTE IMMEDIATE 'DROP TABLE ' || 'albums' || ' CASCADE CONSTRAINTS';
+    EXCEPTION
+       WHEN OTHERS THEN
+          IF SQLCODE != -942 THEN
+             RAISE;
+          END IF;
+    END;
+
+    BEGIN
+       EXECUTE IMMEDIATE 'DROP TABLE ' || 'carriers' || ' CASCADE CONSTRAINTS';
+    EXCEPTION
+       WHEN OTHERS THEN
+          IF SQLCODE != -942 THEN
+             RAISE;
+          END IF;
+    END;
+
+    BEGIN
+       EXECUTE IMMEDIATE 'DROP TABLE ' || 'compositions' || ' CASCADE CONSTRAINTS';
+    EXCEPTION
+       WHEN OTHERS THEN
+          IF SQLCODE != -942 THEN
+             RAISE;
+          END IF;
+    END;
+
+    BEGIN
+       EXECUTE IMMEDIATE 'DROP TABLE ' || 'composition_collection' || ' CASCADE CONSTRAINTS';
+    EXCEPTION
+       WHEN OTHERS THEN
+          IF SQLCODE != -942 THEN
+             RAISE;
+          END IF;
+    END;
+
+    BEGIN
+       EXECUTE IMMEDIATE 'DROP TABLE ' || 'genres' || ' CASCADE CONSTRAINTS';
+    EXCEPTION
+       WHEN OTHERS THEN
+          IF SQLCODE != -942 THEN
+             RAISE;
+          END IF;
+    END;
+
+    BEGIN
+       EXECUTE IMMEDIATE 'DROP TABLE ' || 'genre_collection' || ' CASCADE CONSTRAINTS';
+    EXCEPTION
+       WHEN OTHERS THEN
+          IF SQLCODE != -942 THEN
+             RAISE;
+          END IF;
+    END;
+
+    -- Drop sequences
+    BEGIN
+      EXECUTE IMMEDIATE 'DROP SEQUENCE ' || 'user_id_seq';
+    EXCEPTION
+      WHEN OTHERS THEN
+        IF SQLCODE != -2289 THEN
+          RAISE;
+        END IF;
+    END;
+
+    BEGIN
+      EXECUTE IMMEDIATE 'DROP SEQUENCE ' || 'genre_id_seq';
+    EXCEPTION
+      WHEN OTHERS THEN
+        IF SQLCODE != -2289 THEN
+          RAISE;
+        END IF;
+    END;
+
+    BEGIN
+      EXECUTE IMMEDIATE 'DROP SEQUENCE ' || 'composition_id_seq';
+    EXCEPTION
+      WHEN OTHERS THEN
+        IF SQLCODE != -2289 THEN
+          RAISE;
+        END IF;
+    END;
+
+    BEGIN
+      EXECUTE IMMEDIATE 'DROP SEQUENCE ' || 'album_id_seq';
+    EXCEPTION
+      WHEN OTHERS THEN
+        IF SQLCODE != -2289 THEN
+          RAISE;
+        END IF;
+    END;
+
+    BEGIN
+      EXECUTE IMMEDIATE 'DROP SEQUENCE ' || 'carrier_id_seq';
+    EXCEPTION
+      WHEN OTHERS THEN
+        IF SQLCODE != -2289 THEN
+          RAISE;
+        END IF;
+    END;
+
+    BEGIN
+      EXECUTE IMMEDIATE 'DROP SEQUENCE ' || 'carrier_borrow_record_id_seq';
+    EXCEPTION
+      WHEN OTHERS THEN
+        IF SQLCODE != -2289 THEN
+          RAISE;
+        END IF;
+    END;
 END;
 
-BEGIN
-   EXECUTE IMMEDIATE 'DROP TABLE ' || 'employees' || ' CASCADE CONSTRAINTS';
-EXCEPTION
-   WHEN OTHERS THEN
-      IF SQLCODE != -942 THEN
-         RAISE;
-      END IF;
-END;
-
-BEGIN
-   EXECUTE IMMEDIATE 'DROP TABLE ' || 'genres' || ' CASCADE CONSTRAINTS';
-EXCEPTION
-   WHEN OTHERS THEN
-      IF SQLCODE != -942 THEN
-         RAISE;
-      END IF;
-END;
-
-BEGIN
-   EXECUTE IMMEDIATE 'DROP TABLE ' || 'compositions' || ' CASCADE CONSTRAINTS';
-EXCEPTION
-   WHEN OTHERS THEN
-      IF SQLCODE != -942 THEN
-         RAISE;
-      END IF;
-END;
-
-BEGIN
-   EXECUTE IMMEDIATE 'DROP TABLE ' || 'genre_collection' || ' CASCADE CONSTRAINTS';
-EXCEPTION
-   WHEN OTHERS THEN
-      IF SQLCODE != -942 THEN
-         RAISE;
-      END IF;
-END;
-
-BEGIN
-   EXECUTE IMMEDIATE 'DROP TABLE ' || 'albums' || ' CASCADE CONSTRAINTS';
-EXCEPTION
-   WHEN OTHERS THEN
-      IF SQLCODE != -942 THEN
-         RAISE;
-      END IF;
-END;
-
-BEGIN
-   EXECUTE IMMEDIATE 'DROP TABLE ' || 'composition_collection' || ' CASCADE CONSTRAINTS';
-EXCEPTION
-   WHEN OTHERS THEN
-      IF SQLCODE != -942 THEN
-         RAISE;
-      END IF;
-END;
-
--- Drop seq
-BEGIN
-  EXECUTE IMMEDIATE 'DROP SEQUENCE ' || 'user_id_seq';
-EXCEPTION
-  WHEN OTHERS THEN
-    IF SQLCODE != -2289 THEN
-      RAISE;
-    END IF;
-END;
-
-BEGIN
-  EXECUTE IMMEDIATE 'DROP SEQUENCE ' || 'genre_id_seq';
-EXCEPTION
-  WHEN OTHERS THEN
-    IF SQLCODE != -2289 THEN
-      RAISE;
-    END IF;
-END;
-
-BEGIN
-  EXECUTE IMMEDIATE 'DROP SEQUENCE ' || 'genre_collection_id_seq';
-EXCEPTION
-  WHEN OTHERS THEN
-    IF SQLCODE != -2289 THEN
-      RAISE;
-    END IF;
-END;
-
-BEGIN
-  EXECUTE IMMEDIATE 'DROP SEQUENCE ' || 'composition_id_seq';
-EXCEPTION
-  WHEN OTHERS THEN
-    IF SQLCODE != -2289 THEN
-      RAISE;
-    END IF;
-END;
-
-BEGIN
-  EXECUTE IMMEDIATE 'DROP SEQUENCE ' || 'album_id_seq';
-EXCEPTION
-  WHEN OTHERS THEN
-    IF SQLCODE != -2289 THEN
-      RAISE;
-    END IF;
-END;
-
-BEGIN
-  EXECUTE IMMEDIATE 'DROP SEQUENCE ' || 'composition_collection_id_seq';
-EXCEPTION
-  WHEN OTHERS THEN
-    IF SQLCODE != -2289 THEN
-      RAISE;
-    END IF;
-END;
-END;
-*/
-
-CREATE SEQUENCE user_id_seq START WITH 10000 INCREMENT BY 1;
+CREATE SEQUENCE user_id_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE genre_id_seq START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE genre_collection_id_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE composition_id_seq START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE composition_collection_id_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE album_id_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE carrier_id_seq START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE carrier_collection_id_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE carrier_borrow_record_id_seq START WITH 1 INCREMENT BY 1;
 
 CREATE TABLE users(
@@ -167,11 +190,10 @@ CREATE TABLE compositions(
 );
 
 CREATE TABLE genre_collection(
-    id INT DEFAULT genre_collection_id_seq.NEXTVAL PRIMARY KEY,
     genre_id INT NOT NULL,
     composition_id INT NOT NULL,
 
-    CONSTRAINT genre_collection_unique_id UNIQUE (genre_id, composition_id),
+    CONSTRAINT genre_collection_unique_id PRIMARY KEY (genre_id, composition_id),
 
     CONSTRAINT genre_id_fk
         FOREIGN KEY(genre_id) REFERENCES genres(id)
@@ -193,11 +215,10 @@ CREATE TABLE albums(
 );
 
 CREATE TABLE composition_collection(
-    id INT DEFAULT composition_collection_id_seq.NEXTVAL PRIMARY KEY,
     album_id INT NOT NULL,
     composition_id INT NOT NULL,
 
-    CONSTRAINT composition_collection_unique_id UNIQUE (album_id, composition_id),
+    CONSTRAINT composition_collection_unique_id PRIMARY KEY (album_id, composition_id),
 
     CONSTRAINT album_id_fk
         FOREIGN KEY(album_id) REFERENCES albums(id)
@@ -246,11 +267,10 @@ CREATE TABLE carrier_borrow_records(
 );
 
 CREATE TABLE carrier_collection(
-    id INT DEFAULT carrier_collection_id_seq.NEXTVAL PRIMARY KEY,
     carrier_id INT NOT NULL,
     carrier_borrow_record_id INT NOT NULL,
 
-    CONSTRAINT carrier_collection_unique_id UNIQUE (carrier_id, carrier_borrow_record_id),
+    CONSTRAINT carrier_collection_unique_id PRIMARY KEY (carrier_id, carrier_borrow_record_id),
 
     CONSTRAINT carrier_collection_carrier_id_fk
         FOREIGN KEY(carrier_id) REFERENCES carriers(id)
