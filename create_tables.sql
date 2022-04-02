@@ -171,6 +171,8 @@ CREATE TABLE genre_collection(
     genre_id INT NOT NULL,
     composition_id INT NOT NULL,
 
+    CONSTRAINT genre_collection_unique_id UNIQUE (genre_id, composition_id),
+
     CONSTRAINT genre_id_fk
         FOREIGN KEY(genre_id) REFERENCES genres(id)
         ON DELETE CASCADE,
@@ -194,6 +196,8 @@ CREATE TABLE composition_collection(
     id INT DEFAULT composition_collection_id_seq.NEXTVAL PRIMARY KEY,
     album_id INT NOT NULL,
     composition_id INT NOT NULL,
+
+    CONSTRAINT composition_collection_unique_id UNIQUE (album_id, composition_id),
 
     CONSTRAINT album_id_fk
         FOREIGN KEY(album_id) REFERENCES albums(id)
@@ -245,6 +249,8 @@ CREATE TABLE carrier_collection(
     id INT DEFAULT carrier_collection_id_seq.NEXTVAL PRIMARY KEY,
     carrier_id INT NOT NULL,
     carrier_borrow_record_id INT NOT NULL,
+
+    CONSTRAINT carrier_collection_unique_id UNIQUE (carrier_id, carrier_borrow_record_id),
 
     CONSTRAINT carrier_collection_carrier_id_fk
         FOREIGN KEY(carrier_id) REFERENCES carriers(id)
