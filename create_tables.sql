@@ -143,7 +143,7 @@ CREATE TABLE users(
 CREATE TABLE employees(
     id INT PRIMARY KEY,
     date_of_acceptance DATE NOT NULL,
-    end_of_employment_contract DATE NOT NULL,
+    end_of_employment_contract DATE NULL,
     bank_account VARCHAR2(20) NULL,
     permissions INT DEFAULT 0,
 
