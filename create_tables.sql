@@ -165,10 +165,10 @@ CREATE TABLE users(
 
 CREATE TABLE employees(
     id INT PRIMARY KEY,
-    date_of_acceptance DATE NOT NULL,
+    date_of_acceptance DATE DEFAULT CURRENT_DATE NOT NULL ,
     end_of_employment_contract DATE NULL,
     bank_account VARCHAR2(20) NULL,
-    permissions INT DEFAULT 0,
+    permissions INT DEFAULT 0 NOT NULL ,
 
     CONSTRAINT employee_id_fk
         FOREIGN KEY(id) REFERENCES users(id)
