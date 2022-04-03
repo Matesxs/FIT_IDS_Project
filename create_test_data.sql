@@ -3,6 +3,7 @@ INSERT INTO genres(name) VALUES ('Ambient');
 INSERT INTO genres(name) VALUES ('Video game');
 INSERT INTO genres(name) VALUES ('Classical');
 INSERT INTO genres(name) VALUES ('Contemporary');
+INSERT INTO genres(name) VALUES ('Jazz');
 
 
 -- Create compositions
@@ -50,6 +51,16 @@ INSERT INTO compositions(COMPOSITION_NAME, ORIGINAL_COMPOSITION_NAME, LENGTH, CR
 END;
 
 
+-- Jack Gibbons album (6)
+BEGIN
+INSERT INTO compositions(COMPOSITION_NAME, COMPOSER, LENGTH, CREATION_DATE) VALUES ('Walking the dog', 'George Gershwin', 261, '1997');
+INSERT INTO compositions(COMPOSITION_NAME, COMPOSER, LENGTH, CREATION_DATE) VALUES ('They cant take that away from me', 'George Gershwin', 287, '2003');
+INSERT INTO compositions(COMPOSITION_NAME, COMPOSER, LENGTH, CREATION_DATE) VALUES ('Swanee', 'George Gershwin', 123, '2003');
+INSERT INTO compositions(COMPOSITION_NAME, COMPOSER, LENGTH, CREATION_DATE) VALUES ('Concerto in F: II. Andante con moto', 'George Gershwin', 651, '1997');
+INSERT INTO compositions(COMPOSITION_NAME, ORIGINAL_COMPOSITION_NAME, COMPOSER, LENGTH, CREATION_DATE) VALUES ('Rhapsody in Blue', 'Rhapsodie v Modrém', 'George Gershwin', 869, '2008');
+END;
+
+
 
 
 
@@ -72,6 +83,12 @@ INSERT INTO genre_collection(GENRE_ID, COMPOSITION_ID) VALUES (3, 28);
 INSERT INTO genre_collection(GENRE_ID, COMPOSITION_ID) VALUES (4, 28);
 
 
+-- Jack Gibbons album genres
+FOR x IN 29..33 LOOP
+    INSERT INTO genre_collection(GENRE_ID, COMPOSITION_ID) VALUES (5, x);
+END LOOP;
+INSERT INTO genre_collection(GENRE_ID, COMPOSITION_ID) VALUES (3, 32);
+INSERT INTO genre_collection(GENRE_ID, COMPOSITION_ID) VALUES (3, 33);
 
 
 
@@ -82,13 +99,17 @@ INSERT INTO genre_collection(GENRE_ID, COMPOSITION_ID) VALUES (4, 28);
 INSERT INTO albums(NAME, INTERPRET, PRODUCER, PUBLISHER, LENGTH, DATE_OF_RELEASE) VALUES ('Minecraft – Volume Alpha', 'C418', 'Daniel Rosenfeld', 'self-released', 204, DATE'2011-04-03');
 
 -- Rachmaninoff symphonies album
-INSERT INTO albums(NAME, INTERPRET, PUBLISHER, LENGTH, DATE_OF_RELEASE) VALUES ('Rachmaninoff symphonies 1-3', 'Concertgebouw Orchestra', 'Decca', 8720, DATE'1982-01-01');
+INSERT INTO albums(NAME, INTERPRET, PUBLISHER, LENGTH, DATE_OF_RELEASE) VALUES ('Rachmaninoff symphonies 1-3', 'Concertgebouw Orchestra', 'Decca', 8720, DATE'1982-04-01');
 
 -- Zelda orchestral album
 INSERT INTO albums(NAME, PRODUCER, LENGTH) VALUES ('The Legend Of Zelda (Orchestral)', 'Nintendo', 2616);
 
 -- The video game album
 INSERT INTO albums(NAME, LENGTH) VALUES ('The video game selection', 3439);
+
+-- Jack gibbons album
+INSERT INTO albums(NAME, INTERPRET, PRODUCER, PUBLISHER, LENGTH, DATE_OF_RELEASE) VALUES ('Gibbons plays Gershwin', 'Jack Gibbons', 'Decca', 'United artists ltd.', 204, DATE'2018-06-14');
+
 
 
 
@@ -115,6 +136,15 @@ INSERT INTO composition_collection(ALBUM_ID, COMPOSITION_ID) VALUES (4, 11);
 INSERT INTO composition_collection(ALBUM_ID, COMPOSITION_ID) VALUES (4, 12);
 INSERT INTO composition_collection(ALBUM_ID, COMPOSITION_ID) VALUES (4, 13);
 INSERT INTO composition_collection(ALBUM_ID, COMPOSITION_ID) VALUES (4, 28);
+
+
+-- Jack Gibbons album
+FOR x IN 29..33 LOOP
+    INSERT INTO composition_collection(ALBUM_ID, COMPOSITION_ID) VALUES (5, x);
+END LOOP;
+
+
+
 
 
 -- Create carriers
@@ -146,6 +176,10 @@ END;
 
 
 
+-- Jack gibbons album carriers
+INSERT INTO carriers(ALBUM_ID, TYPE, CONDITION) VALUES (2, 1, 0);
+
+
 
 
 
@@ -172,16 +206,20 @@ INSERT INTO employees(ID, DATE_OF_ACCEPTANCE, BANK_ACCOUNT, PERMISSIONS) VALUES 
 INSERT INTO employees(ID, DATE_OF_ACCEPTANCE, BANK_ACCOUNT, PERMISSIONS) VALUES (3, DATE'2011-01-11', '14-2007418677/0811', 5);
 
 -- Create carrier borrow records
-INSERT INTO carrier_borrow_records(BORROW_DATE, EXPECTED_RETURN_DATE, BORROWER_ID, CREATED_BY_ID) VALUES (DATE'2017-07-02', DATE'2017-07-09', 1, 5);
 INSERT INTO carrier_borrow_records(BORROW_DATE, EXPECTED_RETURN_DATE, BORROWER_ID, CREATED_BY_ID, ACTUAL_RETURN_DATE, ACCEPTED_BY_ID) VALUES (DATE'2013-03-11', DATE'2013-03-25', 4, 2, DATE'2013-04-17', 2);
+INSERT INTO carrier_borrow_records(BORROW_DATE, EXPECTED_RETURN_DATE, BORROWER_ID, CREATED_BY_ID) VALUES (DATE'2022-04-01', DATE'2022-05-01', 6, 2);
+INSERT INTO carrier_borrow_records(BORROW_DATE, EXPECTED_RETURN_DATE, BORROWER_ID, CREATED_BY_ID) VALUES (DATE'2022-03-15', DATE'2022-04-15', 6, 2);
+
+
 
 -- Create carrier collections
 INSERT INTO carrier_collection(CARRIER_ID, CARRIER_BORROW_RECORD_ID) VALUES (1, 1);
 INSERT INTO carrier_collection(CARRIER_ID, CARRIER_BORROW_RECORD_ID) VALUES (5, 1);
 INSERT INTO carrier_collection(CARRIER_ID, CARRIER_BORROW_RECORD_ID) VALUES (6, 1);
 
-INSERT INTO carrier_collection(CARRIER_ID, CARRIER_BORROW_RECORD_ID) VALUES (4, 2);
+INSERT INTO carrier_collection(CARRIER_ID, CARRIER_BORROW_RECORD_ID) VALUES (9, 2);
 
+INSERT INTO carrier_collection(CARRIER_ID, CARRIER_BORROW_RECORD_ID) VALUES (8, 3);
 
 
 COMMIT;
