@@ -6,6 +6,9 @@ SELECT
        U.LAST_NAME as borrower_last_name,
        U.EMAIL as borrower_email,
        A2.NAME as album_name,
+       C2.ID as carrier_id,
+       C2.CONDITION as carrier_condition,
+       C2.CONDITION_DESCRIPTION as carrier_condition_description,
        cbr.BORROW_DATE as borrow_date
 FROM CARRIER_BORROW_RECORDS cbr
     JOIN USERS U on U.ID = cbr.BORROWER_ID

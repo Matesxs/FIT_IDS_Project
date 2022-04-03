@@ -186,7 +186,7 @@ CREATE TABLE compositions(
     original_composition_name VARCHAR2(100) NULL,
     composer VARCHAR2(200) NULL,
     length INT NOT NULL,
-    creation_date DATE NULL
+    creation_date VARCHAR2(4) NULL CHECK(REGEXP_LIKE (creation_date, '^[0-9]{4}$'))
 );
 
 CREATE TABLE genre_collection(
@@ -211,7 +211,7 @@ CREATE TABLE albums(
     producer VARCHAR2(200) NULL,
     publisher VARCHAR2(200) NULL,
     length INT NOT NULL,
-    date_of_release VARCHAR2(4) NULL CHECK(REGEXP_LIKE (year, '^[0-9]{4}$'))
+    date_of_release VARCHAR2(4) NULL CHECK(REGEXP_LIKE (date_of_release, '^[0-9]{4}$'))
 );
 
 CREATE TABLE composition_collection(
