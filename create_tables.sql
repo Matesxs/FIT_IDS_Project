@@ -160,7 +160,7 @@ CREATE TABLE users(
     last_name VARCHAR2(50) NOT NULL,
     address VARCHAR2(100) NOT NULL,
     phone_number VARCHAR2(20) NULL,
-    email VARCHAR2(50) NOT NULL CHECK(REGEXP_LIKE (email,'^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'))
+    email VARCHAR2(50) NOT NULL CHECK(REGEXP_LIKE (email, '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'))
 );
 
 CREATE TABLE employees(
@@ -211,7 +211,7 @@ CREATE TABLE albums(
     producer VARCHAR2(200) NULL,
     publisher VARCHAR2(200) NULL,
     length INT NOT NULL,
-    date_of_release DATE NULL
+    date_of_release VARCHAR2(4) NULL CHECK(REGEXP_LIKE (year, '^[0-9]{4}$'))
 );
 
 CREATE TABLE composition_collection(
