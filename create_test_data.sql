@@ -73,6 +73,13 @@ BEGIN
     INSERT INTO compositions(COMPOSITION_NAME, COMPOSER, LENGTH, CREATION_DATE) VALUES ('Time machine', 'Waterflame', 277, '2009');
 END;
 
+-- Unused Album (x)
+BEGIN
+    INSERT INTO compositions(COMPOSITION_NAME, COMPOSER, LENGTH, CREATION_DATE) VALUES ('Test', 'Waterflame', 110, '2007');
+END
+
+
+
 
 -- Create genre collections for compositions
 
@@ -116,6 +123,15 @@ BEGIN
         INSERT INTO genre_collection(GENRE_ID, COMPOSITION_ID) VALUES (6, x);
     END LOOP;
 END;
+
+
+-- Unused album genre
+INSERT INTO genre_collection(GENRE_ID, COMPOSITION_ID) VALUES (2, 40);
+
+
+
+
+
 
 -- Create Albums and fill them
 
@@ -167,6 +183,15 @@ BEGIN
     END LOOP;
 END;
 
+-- Unused album
+INSERT INTO albums(NAME, INTERPRET, PRODUCER, LENGTH, DATE_OF_RELEASE) VALUES ('The Unused album', 'Waterflame', 'FL Studio', 1236, '2014');
+INSERT INTO composition_collection(ALBUM_ID, COMPOSITION_ID) VALUES (7, 40);
+
+
+
+
+
+
 -- Create carriers
 
 -- Volume Alpha carriers
@@ -204,6 +229,15 @@ BEGIN
     INSERT INTO carriers(ALBUM_ID, TYPE, CONDITION) VALUES (6, 2, 0);
     INSERT INTO carriers(ALBUM_ID, TYPE, CONDITION) VALUES (6, 3, 0);
     INSERT INTO carriers(ALBUM_ID, TYPE, CONDITION, CONDITION_DESCRIPTION) VALUES (6, 4, 2, 'Scratched surface');
+END;
+
+
+-- Unused album carrier
+BEGIN
+    INSERT INTO carriers(ALBUM_ID, TYPE, CONDITION) VALUES (7, 1, 0);
+    INSERT INTO carriers(ALBUM_ID, TYPE, CONDITION) VALUES (7, 1, 0);
+    INSERT INTO carriers(ALBUM_ID, TYPE, CONDITION, CONDITION_DESCRIPTION) VALUES (7, 1, 1, 'Scratched surface');
+    INSERT INTO carriers(ALBUM_ID, TYPE, CONDITION) VALUES (7, 1, 0);
 END;
 
 
