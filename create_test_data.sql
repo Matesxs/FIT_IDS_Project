@@ -76,7 +76,7 @@ END;
 -- September single (1)
 BEGIN
     INSERT INTO compositions(COMPOSITION_NAME, COMPOSER, LENGTH, CREATION_DATE) VALUES ('September', 'Earth, Wind & Fire', 215, '1978');
-END
+END;
 
 
 
