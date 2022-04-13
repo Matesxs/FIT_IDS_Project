@@ -73,9 +73,9 @@ BEGIN
     INSERT INTO compositions(COMPOSITION_NAME, COMPOSER, LENGTH, CREATION_DATE) VALUES ('Time machine', 'Waterflame', 277, '2009');
 END;
 
--- Unused Album (x)
+-- September single (1)
 BEGIN
-    INSERT INTO compositions(COMPOSITION_NAME, COMPOSER, LENGTH, CREATION_DATE) VALUES ('Test', 'Waterflame', 110, '2007');
+    INSERT INTO compositions(COMPOSITION_NAME, COMPOSER, LENGTH, CREATION_DATE) VALUES ('September', 'Earth, Wind & Fire', 215, '1978');
 END
 
 
@@ -125,9 +125,10 @@ BEGIN
 END;
 
 
--- Unused album genre
-INSERT INTO genre_collection(GENRE_ID, COMPOSITION_ID) VALUES (2, 40);
-
+-- September single genre
+BEGIN
+    INSERT INTO genre_collection(GENRE_ID, COMPOSITION_ID) VALUES (6, 40);
+END;
 
 
 
@@ -184,7 +185,7 @@ BEGIN
 END;
 
 -- Unused album
-INSERT INTO albums(NAME, INTERPRET, PRODUCER, LENGTH, DATE_OF_RELEASE) VALUES ('The Unused album', 'Waterflame', 'FL Studio', 1236, '2014');
+INSERT INTO albums(NAME, INTERPRET, PRODUCER, LENGTH, DATE_OF_RELEASE) VALUES ('The Best of Earth, Wind & Fire, Vol. 1', 'Earth, Wind & Fire', 'ARC/Columbia Records', 235, '1978');
 INSERT INTO composition_collection(ALBUM_ID, COMPOSITION_ID) VALUES (7, 40);
 
 
@@ -232,7 +233,7 @@ BEGIN
 END;
 
 
--- Unused album carrier
+-- September album carrier
 BEGIN
     INSERT INTO carriers(ALBUM_ID, TYPE, CONDITION) VALUES (7, 1, 0);
     INSERT INTO carriers(ALBUM_ID, TYPE, CONDITION) VALUES (7, 1, 0);
