@@ -137,7 +137,7 @@ END;
 -- Create Albums and fill them
 
 -- Volume Alpha album
-INSERT INTO albums(NAME, INTERPRET, PRODUCER, PUBLISHER, LENGTH, DATE_OF_RELEASE) VALUES ('Minecraft – Volume Alpha', 'C418', 'Daniel Rosenfeld', 'self-released', 204, '2011');
+INSERT INTO albums(NAME, INTERPRET, PRODUCER, PUBLISHER, DATE_OF_RELEASE) VALUES ('Minecraft – Volume Alpha', 'C418', 'Daniel Rosenfeld', 'self-released', '2011');
 BEGIN
     FOR x IN 1..24 LOOP
         INSERT INTO composition_collection(ALBUM_ID, COMPOSITION_ID) VALUES (1, x);
@@ -145,7 +145,7 @@ BEGIN
 END;
 
 -- Rachmaninoff symphonies album
-INSERT INTO albums(NAME, INTERPRET, PUBLISHER, LENGTH, DATE_OF_RELEASE) VALUES ('Rachmaninoff symphonies 1-3', 'Concertgebouw Orchestra', 'Decca', 8720, '1982');
+INSERT INTO albums(NAME, INTERPRET, PUBLISHER, DATE_OF_RELEASE) VALUES ('Rachmaninoff symphonies 1-3', 'Concertgebouw Orchestra', 'Decca', '1982');
 BEGIN
     FOR x IN 25..27 LOOP
         INSERT INTO composition_collection(ALBUM_ID, COMPOSITION_ID) VALUES (2, x);
@@ -153,12 +153,12 @@ BEGIN
 END;
 
 -- Zelda orchestral album
-INSERT INTO albums(NAME, PRODUCER, LENGTH) VALUES ('The Legend Of Zelda (Orchestral)', 'Nintendo', 2616);
+INSERT INTO albums(NAME, PRODUCER) VALUES ('The Legend Of Zelda (Orchestral)', 'Nintendo');
 INSERT INTO composition_collection(ALBUM_ID, COMPOSITION_ID) VALUES (3, 28);
 
 
 -- The video game album
-INSERT INTO albums(NAME, LENGTH) VALUES ('The video game selection', 3439);
+INSERT INTO albums(NAME) VALUES ('The video game selection');
 INSERT INTO composition_collection(ALBUM_ID, COMPOSITION_ID) VALUES (4, 1);
 INSERT INTO composition_collection(ALBUM_ID, COMPOSITION_ID) VALUES (4, 2);
 INSERT INTO composition_collection(ALBUM_ID, COMPOSITION_ID) VALUES (4, 3);
@@ -169,7 +169,7 @@ INSERT INTO composition_collection(ALBUM_ID, COMPOSITION_ID) VALUES (4, 28);
 
 
 -- Jack Gibbons album
-INSERT INTO albums(NAME, INTERPRET, PRODUCER, PUBLISHER, LENGTH, DATE_OF_RELEASE) VALUES ('Gibbons plays Gershwin', 'Jack Gibbons', 'Decca', 'United artists ltd.', 204, '2018');
+INSERT INTO albums(NAME, INTERPRET, PRODUCER, PUBLISHER, DATE_OF_RELEASE) VALUES ('Gibbons plays Gershwin', 'Jack Gibbons', 'Decca', 'United artists ltd.', '2018');
 BEGIN
     FOR x IN 29..33 LOOP
         INSERT INTO composition_collection(ALBUM_ID, COMPOSITION_ID) VALUES (5, x);
@@ -177,7 +177,7 @@ BEGIN
 END;
 
 -- The best of Waterflame album
-INSERT INTO albums(NAME, INTERPRET, PRODUCER, LENGTH, DATE_OF_RELEASE) VALUES ('The best of Waterflame', 'Waterflame', 'FL Studio', 1236, '2014');
+INSERT INTO albums(NAME, INTERPRET, PRODUCER, DATE_OF_RELEASE) VALUES ('The best of Waterflame', 'Waterflame', 'FL Studio', '2014');
 BEGIN
     FOR x IN 34..39 LOOP
         INSERT INTO composition_collection(ALBUM_ID, COMPOSITION_ID) VALUES (6, x);
@@ -185,7 +185,7 @@ BEGIN
 END;
 
 -- Unused album
-INSERT INTO albums(NAME, INTERPRET, PRODUCER, LENGTH, DATE_OF_RELEASE) VALUES ('The Best of Earth, Wind & Fire, Vol. 1', 'Earth, Wind & Fire', 'ARC/Columbia Records', 235, '1978');
+INSERT INTO albums(NAME, INTERPRET, PRODUCER, DATE_OF_RELEASE) VALUES ('The Best of Earth, Wind & Fire, Vol. 1', 'Earth, Wind & Fire', 'ARC/Columbia Records', '1978');
 INSERT INTO composition_collection(ALBUM_ID, COMPOSITION_ID) VALUES (7, 40);
 
 

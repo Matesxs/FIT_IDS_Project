@@ -210,7 +210,7 @@ CREATE TABLE albums(
     interpret VARCHAR2(200) NULL,
     producer VARCHAR2(200) NULL,
     publisher VARCHAR2(200) NULL,
-    length INT NOT NULL,
+    length INT DEFAULT 0,
     date_of_release VARCHAR2(4) NULL CHECK(REGEXP_LIKE (date_of_release, '^[0-9]{4}$'))
 );
 
@@ -282,3 +282,73 @@ CREATE TABLE carrier_collection(
 );
 
 COMMIT;
+
+-- Create trigger for automatic generating of album length
+CREATE OR REPLACE TRIGGER auto_album_length_trigger
+    AFTER INSERT OR UPDATE OR DELETE
+    ON COMPOSITION_COLLECTION
+    FOR EACH ROW
+DECLARE
+    tmp_album_length ALBUMS.length%TYPE;
+    new_album_length ALBUMS.length%TYPE;
+    tmp_comp_length COMPOSITIONS.length%TYPE;
+    old_comp_length COMPOSITIONS.length%TYPE;
+BEGIN
+    IF INSERTING THEN
+        SELECT length into tmp_album_length FROM ALBUMS WHERE albums.id = :NEW.album_id;
+        SELECT length into tmp_comp_length FROM COMPOSITIONS WHERE compositions.id = :NEW.composition_id;
+
+        new_album_length := tmp_album_length + tmp_comp_length;
+    ELSIF UPDATING THEN
+        SELECT length into tmp_album_length FROM ALBUMS WHERE albums.id = :NEW.album_id;
+        SELECT length into old_comp_length FROM COMPOSITIONS WHERE compositions.id = :OLD.composition_id;
+        SELECT length into tmp_comp_length FROM COMPOSITIONS WHERE compositions.id = :NEW.composition_id;
+
+        new_album_length := tmp_album_length - old_comp_length + tmp_comp_length;
+    ELSIF DELETING THEN
+        SELECT length into tmp_album_length FROM ALBUMS WHERE albums.id = :OLD.album_id;
+        SELECT length into tmp_comp_length FROM COMPOSITIONS WHERE compositions.id = :OLD.composition_id;
+
+        new_album_length := tmp_album_length - tmp_comp_length;
+    END IF;
+
+    UPDATE ALBUMS SET length = new_album_length WHERE albums.id = :NEW.album_id;
+END;
+/
+
+-- Check if return date is valid
+CREATE OR REPLACE TRIGGER test_return_date_trigger
+    AFTER INSERT OR UPDATE
+    ON CARRIER_BORROW_RECORDS
+    FOR EACH ROW
+BEGIN
+    if (:NEW.actual_return_date IS NOT NULL) THEN
+        if (:NEW.actual_return_date < :NEW.borrow_date) THEN
+            raise_application_error(-20001,'Invalid return date');
+        END IF;
+    END IF;
+END;
+/
+
+-- Check if expected return date is valid
+CREATE OR REPLACE TRIGGER test_expected_return_date_trigger
+    AFTER INSERT OR UPDATE
+    ON CARRIER_BORROW_RECORDS
+    FOR EACH ROW
+BEGIN
+    if (:NEW.expected_return_date < :NEW.borrow_date) THEN
+        raise_application_error(-20002,'Invalid expected return date');
+    END IF;
+END;
+/
+
+GRANT ALL PRIVILEGES ON ALBUMS TO xpospi0k;
+GRANT ALL PRIVILEGES ON CARRIER_BORROW_RECORDS TO xpospi0k;
+GRANT ALL PRIVILEGES ON CARRIER_COLLECTION TO xpospi0k;
+GRANT ALL PRIVILEGES ON CARRIERS TO xpospi0k;
+GRANT ALL PRIVILEGES ON COMPOSITION_COLLECTION TO xpospi0k;
+GRANT ALL PRIVILEGES ON COMPOSITIONS TO xpospi0k;
+GRANT ALL PRIVILEGES ON EMPLOYEES TO xpospi0k;
+GRANT ALL PRIVILEGES ON GENRE_COLLECTION TO xpospi0k;
+GRANT ALL PRIVILEGES ON GENRES TO xpospi0k;
+GRANT ALL PRIVILEGES ON USERS TO xpospi0k;
