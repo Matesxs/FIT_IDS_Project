@@ -47,7 +47,7 @@ EXPLAIN PLAN FOR
 
 SELECT PLAN_TABLE_OUTPUT FROM TABLE(DBMS_XPLAN.DISPLAY());
 
-
+-- Select from different user
 SELECT
   cbr.ID as borrow_id,
        cbr.BORROWER_ID as borrower_id,
