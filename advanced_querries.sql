@@ -89,3 +89,12 @@ AS
 
 -- Test if it works
 SELECT * FROM late_returners;
+
+-- Test triggers - These will trigger exception so to test all off them run them separately
+-- Trigger for counting album length is tested by adding test data
+
+-- Test return date is before borrow date
+INSERT INTO carrier_borrow_records(BORROW_DATE, EXPECTED_RETURN_DATE, ACTUAL_RETURN_DATE, BORROWER_ID, CREATED_BY_ID) VALUES (DATE'2021-12-23', DATE'2022-01-23', DATE'2020-01-23', 5, 2);
+
+-- Test expected return date is before borrow date
+INSERT INTO carrier_borrow_records(BORROW_DATE, EXPECTED_RETURN_DATE, BORROWER_ID, CREATED_BY_ID) VALUES (DATE'2021-12-23', DATE'2020-01-23', 5, 2);
