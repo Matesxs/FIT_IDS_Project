@@ -13,74 +13,46 @@ Druhý a třetí trigger kontrolují správnost zadávání dat při manipulaci 
 
 
 \subsection{Optimalizace dotazů}
-Princip optimalizace dotazů je v tomto projektu předveden na dvou případech. Dotaz zjišťující počet vypůjčených nosičů alb v jednotlivých měsících nejdříve proběhl standardně, tedy prostým příkazem \texttt{SELECT} z tabulky \texttt{CARRIER\_BORROW\_RECORDS}. V takovém případě byla jeho cena 5 (tabulka \ref{tab1}). Následně byl přidán index přistupující ke sloupci data vypůjček téže tabulky. V takovém případě spadla jeho cena na hodnotu 3 (tabulka \ref{tab2}). Tento dotaz, vzhledem ke své minimálnosti, již nelze dále optimalizovat.
+Princip optimalizace dotazů je v tomto projektu předveden na dvou případech. Dotaz zjišťující počet vypůjčených nosičů alb v jednotlivých měsících nejdříve proběhl standardně, tedy prostým příkazem \texttt{SELECT} z tabulky \texttt{CARRIER\_BORROW\_RECORDS}. V takovém případě byla jeho cena 5 (tabulka \ref{pic1}). Následně byl přidán index přistupující ke sloupci data vypůjček téže tabulky. V takovém případě spadla jeho cena na hodnotu 3 (tabulka \ref{pic2}). Tento dotaz, vzhledem ke své minimálnosti, již nelze dále optimalizovat.
 
-\begin{table}[h]
-    \centering \catcode`\-=12
-    \begin{tabular}{|c|c|c|c|c|c|}
-        \hline
-        \textbf{ID} & \textbf{Operation} & \textbf{Name} & \textbf{Rows} & \textbf{Bytes} & \textbf{Cost} \\ \hline
-        0 & SELECT STATEMENT & & 9 & 72 & {\color{red} 5} \\ 
-        1 & SORT ORDER BY & & 9 & 72 & 5 \\
-        2 & HASH GROUP BY & & 9 & 72 & 5 \\
-        3 & TABLE ACCESS FULL & CARRIER\_BORROW\_RECORDS & 10 & 80 & 3 \\
-        \hline
-    \end{tabular}
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.8]{1-1.png}
     \caption{\texttt{EXPLAIN PLAN} \textbf{před} optimalizací}
-    \label{tab1}
-\end{table}
+    \label{pic1}
+\end{figure}
 
-\begin{table}[h]
-    \centering \catcode`\-=12
-    \begin{tabular}{|c|c|c|c|c|c|}
-        \hline
-        \textbf{ID} & \textbf{Operation} & \textbf{Name} & \textbf{Rows} & \textbf{Bytes} & \textbf{Cost} \\ \hline
-        0 & SELECT STATEMENT & & 9 & 72 & {\color{red} 3} \\ 
-        1 & SORT ORDER BY & & 9 & 72 & 3 \\
-        2 & HASH GROUP BY & & 9 & 72 & 3 \\
-        3 & TABLE ACCESS FULL & CARRIER\_BORROW\_RECORDS & 10 & 80 & 1 \\
-        \hline
-    \end{tabular}
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.8]{1-2.png}
     \caption{\texttt{EXPLAIN PLAN} \textbf{po} optimalizací}
-    \label{tab2}
-\end{table}
+    \label{pic2}
+\end{figure}
+
 
 \newpage
-Druhá optimalizace je znázorněna na dotazu vypisujícím jména zákazníků, kteří si kdy vypůjčili album \textit{The best of Waterflame}. Po spojení čtyř tabulek je při standardní cestě  cena dotazu 12 (tabulka \ref{tab3}). Po vytvoření indexu do jmenného sloupce tabulky alb spadne cena dotazu na hodnotu 11 (tabulka \ref{tab4}). Tento výsledek by šel ještě dále vylepšit přidáním indexů do tabulky \texttt{CARRIER\_COLLECTION}, ale vzhledem k malému počtu záznamů by toto vylepšení čas dále nezlepšilo.
-
-\begin{table}[h]
-    \centering \catcode`\-=12
-    \begin{tabular}{|c|c|c|c|c|c|}
-        \hline
-        \textbf{ID} & \textbf{Operation} & \textbf{Name} & \textbf{Rows} & \textbf{Bytes} & \textbf{Cost} \\ \hline
-        0 & SELECT STATEMENT & & 2 & 140 & {\color{red} 12} \\ 
-        1 & HASH GROUP BY & & 2 & 140 & 12 \\
-        2 & NESTED LOOPS & & 2 & 140 & 11 \\
-        3 & NESTED LOOPS & & 2 & 140 & 11 \\ \hline
-        \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
-        \hline
-    \end{tabular}
-    \caption{řez \texttt{EXPLAIN PLAN} \textbf{před} optimalizací}
-    \label{tab3}
-\end{table}
-
-\begin{table}[h]
-    \centering \catcode`\-=12
-    \begin{tabular}{|c|c|c|c|c|c|}
-        \hline
-        \textbf{ID} & \textbf{Operation} & \textbf{Name} & \textbf{Rows} & \textbf{Bytes} & \textbf{Cost} \\ \hline
-        0 & SELECT STATEMENT & & 2 & 140 & {\color{red} 11} \\ 
-        1 & HASH GROUP BY & & 2 & 140 & 11 \\
-        2 & NESTED LOOPS & & 2 & 140 & 10 \\
-        3 & NESTED LOOPS & & 2 & 140 & 10 \\ \hline
-        \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
-        \hline
-    \end{tabular}
-    \caption{řez \texttt{EXPLAIN PLAN} \textbf{po} optimalizací}
-    \label{tab4}
-\end{table}
+Druhá optimalizace je znázorněna na dotazu vypisujícím jména zákazníků, kteří si kdy vypůjčili album \textit{The best of Waterflame}. Po spojení čtyř tabulek je při standardní cestě  cena dotazu 12 (tabulka \ref{pic3}). Po vytvoření indexu do jmenného sloupce tabulky alb spadne cena dotazu na hodnotu 11 (tabulka \ref{pic4}). Tento výsledek by šel ještě dále vylepšit přidáním indexů do tabulky \texttt{CARRIER\_COLLECTION}, ale vzhledem k malému počtu záznamů by toto vylepšení čas dále nezlepšilo.
 
 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.65]{2-1.png}
+    \caption{\texttt{EXPLAIN PLAN} \textbf{před} optimalizací}
+    \label{pic3}
+\end{figure}
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.65]{2-2.png}
+    \caption{\texttt{EXPLAIN PLAN} \textbf{po} optimalizací}
+    \label{pic4}
+\end{figure}
+
+
+
+\newpage
 \subsection{Práva a materializovaný pohled}
 Definice přístupových práv k databázovým objektům pro druhého člena týmu byly provedeny příkazy:
 
@@ -93,3 +65,4 @@ Definice přístupových práv k databázovým objektům pro druhého člena tý
 a to pro každý databázový objekt zvlášť. Řešitelům se bohužel nepodařilo tuto konstrukci minimalizovat. 
 
 Pro demonstraci materializovaného pohledu \texttt{late\_returners} patřící prvnímu členu týmu, kde tabulky byly definované druhým členem týmu, byl vybrán dotaz na konkrétní osoby, které překračují výpůjční dobu. Toto bylo dosaženo spojením čtyř tabulek autora \texttt{xdousa00}. Pohled pak patří uživateli \texttt{xpospi0k} s příslušnými právy. Konkrétní \texttt{SELECT} následuje v kódu vzápětí,  přičemž jednoduše vybere všechny záznamy.
+
