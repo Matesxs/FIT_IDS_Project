@@ -1,0 +1,162 @@
+\documentclass{article}
+
+\usepackage[czech]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage[left=2cm,text={17cm, 24cm},top=3cm]{geometry}
+
+\usepackage{rotating}
+\usepackage{graphicx} % vkládání obrázků
+\usepackage{amsmath} % pokročilá sazba matematiky
+% \usepackage{xcolor} % barevný text
+\usepackage{siunitx} % SI jednotky
+\usepackage{graphicx}
+\usepackage{hyperref} % Clicable table of contents
+\usepackage{color} % Color for table of contents
+\usepackage{float}
+\usepackage{lscape}
+\usepackage{hyperref} 
+
+\restylefloat{figure}
+
+\hypersetup{
+    colorlinks=true, %set true if you want colored links
+    linktoc=all, %set to all if you want both sections and subsections linked
+    linkcolor=black,  %choose some color if you want links to stand out
+}
+
+\graphicspath{ {./images} } % Include image folder
+
+\begin{document}
+
+% start first page
+\clearpage
+\begin{titlepage}
+	\begin{center}
+		\textsc{\LARGE Vysoké Učení Technické v Brně}\\[0.5cm]
+		{\LARGE Fakulta informačních technologií }\\[4.0cm]
+
+		\textsc{\LARGE IDS - Databázové systémy}\\[0.5cm]
+		\textsc{\LARGE 2021/2022}\\[3.5cm]
+
+		{\LARGE Projekt}\\[0.5cm]
+    {\LARGE \textbf{Půjčovna hudebních nosičů}}\\
+	\end{center}
+
+	\vfill 
+
+	\begin{flushleft} 
+		\large
+		Martin Douša (xdousa00)\\
+    Zbyněk Pospíšil (xpospi0k)
+		\hfill
+		Brno, \today
+	\end{flushleft}
+\end{titlepage}
+\thispagestyle{empty}
+
+
+
+\newpage
+\section{Úvod}
+Tato dokumentace shrnuje principy implementace předposlední, tedy 4. části projektu předmětu IDS. Není zde pro nadbytečnost obsažen ER diagram, ani model případů užití, jelikož je lze nalézt v dokumentaci odevzdané dříve. Pro přehlednost je okomentován i zdrojový kód.
+
+\section{Vytváření pokročilých triggerů}
+Nejdříve je provedeno naplnění tabulky daty. Ta jsou vytvořena, pokud možno, co nejrůznoroději tak, aby byly pokryty všechny eventuální kombinace pokročilých dotazů.
+
+Jelikož se projekt zabývá půjčovnou hudebních nosičů s různými alby o různých délkách skladeb, bylo vhodné vytvořit \texttt{databázový trigger} nad počítáním celkové délky alba při známé délce jednotlivých skladeb. Tento trigger má název \texttt{auto\_album\_length\_trigger}, přičemž po přidání, aktualizaci, nebo odstranění skladby z alba deklaruje čtyři pomocné proměnné, které pomáhají s následnou úpravou celkového času.
+
+Druhý a třetí trigger kontrolují správnost zadávání dat při manipulaci s výpůjčkou nosiče. Při přidávání, nebo editaci dat v tabulce \texttt{CARRIER\_BORROW\_RECORDS} automaticky kontrolují validitu dat vrácení, resp. očekávaného vrácení a při chybném vstupu volají výjimku.
+
+
+
+
+\section{Optimalizace dotazů}
+Princip optimalizace dotazů je v tomto projektu předveden na dvou případech. Dotaz zjišťující počet vypůjčených nosičů alb v jednotlivých měsících nejdříve proběhl standardně, tedy prostým příkazem \texttt{SELECT} z tabulky \texttt{CARRIER\_BORROW\_RECORDS}. V takovém případě byla jeho cena 5 (tabulka \ref{tab1}). Následně byl přidán index přistupující ke sloupci data vypůjček téže tabulky. V takovém případě spadla jeho cena na hodnotu 3 (tabulka \ref{tab2}). Tento dotaz, vzhledem ke své minimálnosti, již nelze dále optimalizovat.
+
+\begin{table}[h]
+    \centering \catcode`\-=12
+    \begin{tabular}{|c|c|c|c|c|c|}
+        \hline
+        \textbf{ID} & \textbf{Operation} & \textbf{Name} & \textbf{Rows} & \textbf{Bytes} & \textbf{Cost} \\ \hline
+        0 & SELECT STATEMENT & & 9 & 72 & {\color{red} 5} \\ 
+        1 & SORT ORDER BY & & 9 & 72 & 5 \\
+        2 & HASH GROUP BY & & 9 & 72 & 5 \\
+        3 & TABLE ACCESS FULL & CARRIER\_BORROW\_RECORDS & 10 & 80 & 3 \\
+        \hline
+    \end{tabular}
+    \caption{\texttt{EXPLAIN PLAN} \textbf{před} optimalizací}
+    \label{tab1}
+\end{table}
+
+\begin{table}[h]
+    \centering \catcode`\-=12
+    \begin{tabular}{|c|c|c|c|c|c|}
+        \hline
+        \textbf{ID} & \textbf{Operation} & \textbf{Name} & \textbf{Rows} & \textbf{Bytes} & \textbf{Cost} \\ \hline
+        0 & SELECT STATEMENT & & 9 & 72 & {\color{red} 3} \\ 
+        1 & SORT ORDER BY & & 9 & 72 & 3 \\
+        2 & HASH GROUP BY & & 9 & 72 & 3 \\
+        3 & TABLE ACCESS FULL & CARRIER\_BORROW\_RECORDS & 10 & 80 & 1 \\
+        \hline
+    \end{tabular}
+    \caption{\texttt{EXPLAIN PLAN} \textbf{po} optimalizací}
+    \label{tab2}
+\end{table}
+
+\newpage
+Druhá optimalizace je znázorněna na dotazu vypisujícím jména zákazníků, kteří si kdy vypůjčili album \textit{The best of Waterflame}. Po spojení čtyř tabulek je při standardní cestě  cena dotazu 12 (tabulka \ref{tab3}). Po vytvoření indexu do jmenného sloupce tabulky alb spadne cena dotazu na hodnotu 11 (tabulka \ref{tab4}). Tento výsledek by šel ještě dále vylepšit přidáním indexů do tabulky \texttt{CARRIER\_COLLECTION}, ale vzhledem k malému počtu záznamů by toto vylepšení čas dále nezlepšilo.
+
+\begin{table}[h]
+    \centering \catcode`\-=12
+    \begin{tabular}{|c|c|c|c|c|c|}
+        \hline
+        \textbf{ID} & \textbf{Operation} & \textbf{Name} & \textbf{Rows} & \textbf{Bytes} & \textbf{Cost} \\ \hline
+        0 & SELECT STATEMENT & & 2 & 140 & {\color{red} 12} \\ 
+        1 & HASH GROUP BY & & 2 & 140 & 12 \\
+        2 & NESTED LOOPS & & 2 & 140 & 11 \\
+        3 & NESTED LOOPS & & 2 & 140 & 11 \\ \hline
+        \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+        \hline
+    \end{tabular}
+    \caption{řez \texttt{EXPLAIN PLAN} \textbf{před} optimalizací}
+    \label{tab3}
+\end{table}
+
+\begin{table}[h]
+    \centering \catcode`\-=12
+    \begin{tabular}{|c|c|c|c|c|c|}
+        \hline
+        \textbf{ID} & \textbf{Operation} & \textbf{Name} & \textbf{Rows} & \textbf{Bytes} & \textbf{Cost} \\ \hline
+        0 & SELECT STATEMENT & & 2 & 140 & {\color{red} 11} \\ 
+        1 & HASH GROUP BY & & 2 & 140 & 11 \\
+        2 & NESTED LOOPS & & 2 & 140 & 10 \\
+        3 & NESTED LOOPS & & 2 & 140 & 10 \\ \hline
+        \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+        \hline
+    \end{tabular}
+    \caption{řez \texttt{EXPLAIN PLAN} \textbf{po} optimalizací}
+    \label{tab4}
+\end{table}
+
+
+\section{Práva a materializovaný pohled}
+Definice přístupových práv k databázovým objektům pro druhého člena týmu byly provedeny příkazy:
+
+\medskip
+\noindent
+\texttt{GRANT~ALL~PRIVILEGES~ON~\dots~TO~\dots}
+
+\medskip
+\noindent
+a to pro každý databázový objekt zvlášť. Řešitelům se bohužel nepodařilo tuto konstrukci minimalizovat. 
+
+Pro demonstraci materializovaného pohledu \texttt{late\_returners} patřící prvnímu členu týmu, kde tabulky byly definované druhým členem týmu, byl vybrán dotaz na konkrétní osoby, které překračují výpůjční dobu. Toto bylo dosaženo spojením čtyř tabulek autora \texttt{xdousa00}. Pohled pak patří uživateli \texttt{xpospi0k} s příslušnými právy. Konkrétní \texttt{SELECT} následuje v kódu vzápětí,  přičemž jednoduše vybere všechny záznamy.
+
+
+
+
+
+
+\end{document}
